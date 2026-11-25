@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deepfake pour de bon | Atelier interactif</title>
+<style>
+:root{--bg:#142B50;--panel:#203D68;--cyan:#35d7e8;--purple:#B48CFF;--white:#f5f7ff;--muted:#b8c5dc;--green:#48d69a;--red:#ff7185}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top right,#172e57 0,#081226 48%);color:var(--white);font-family:Arial,sans-serif;line-height:1.55}
+header{padding:28px 7%;border-bottom:1px solid #294064;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:800;letter-spacing:1px;color:var(--cyan)}.tag{font-size:12px;color:var(--muted);border:1px solid #3a5278;padding:6px 10px;border-radius:20px}
+main{max-width:1100px;margin:auto;padding:32px 22px 60px}
+.hero{padding:24px 0 30px}.eyebrow{color:var(--cyan);font-weight:bold;text-transform:uppercase;font-size:12px;letter-spacing:2px}
+h1{font-size:clamp(32px,5vw,54px);line-height:1.08;margin:12px 0}h2{margin:0 0 10px}p{color:var(--muted)}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 22px}
+button,.tab{border:0;border-radius:12px;padding:12px 17px;font-weight:bold;cursor:pointer}
+.tab{background:#294A78;color:var(--muted)}.tab.active{background:var(--cyan);color:#071327}
+.card{background:rgba(18,35,66,.94);border:1px solid #2c456c;border-radius:18px;padding:22px;margin:14px 0;box-shadow:0 12px 32px #0002}
+.row{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap}
+.pill{font-size:12px;background:#21395f;color:var(--cyan);padding:6px 10px;border-radius:20px}
+.progress{height:8px;background:#263b5e;border-radius:10px;overflow:hidden;margin:14px 0}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--purple));transition:.3s}
+.media{background:#071020;border:1px dashed #52698e;border-radius:14px;min-height:175px;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;margin:16px 0;color:var(--muted)}
+.media video,.media audio{max-width:100%;width:100%;max-height:330px}.media img{max-width:100%;max-height:330px;border-radius:10px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.primary{background:var(--cyan);color:#061426}.secondary{background:#294A78;color:var(--white)}.yes{background:#1d624e;color:#d9fff0}.no{background:#663448;color:#ffe2e7}
+button:disabled{opacity:.4;cursor:not-allowed}
+.feedback{border-left:4px solid var(--cyan);padding:12px 16px;background:#0b1930;border-radius:8px;margin-top:15px}
+.hidden{display:none!important}.small{font-size:13px}.muted{color:var(--muted)}.score{font-size:25px;color:var(--cyan);font-weight:bold}
+input[type=file]{max-width:100%;color:var(--muted);margin:10px 0}
+ul{color:var(--muted);padding-left:20px}li{margin:8px 0}
+footer{text-align:center;color:#8fa2c2;padding:24px;font-size:12px}
+@media(max-width:650px){header{padding:20px}main{padding:20px 14px}.card{padding:17px}}
+</style>
+</head>
+<body>
+<header><div class="brand">◆ DEEPFAKE POUR DE BON</div><div class="tag">ATELIER PÉDAGOGIQUE • MÉDIAS SYNTHÉTIQUES</div></header>
+<main>
+<section class="hero">
+ <div class="eyebrow">Comprendre • Tester • Vérifier</div>
+<h1>Bienvenue dans Deepfake pour de bon !</h1>
+ <p>Apprends à repérer les indices d’un contenu audio ou image généré par l’IA.</p>
+</section>
+<nav class="tabs">
+ <button class="tab active" data-page="quiz">1. Quiz</button>
+ <button class="tab" data-page="inspecteur">2. Inspecteur</button>
+ <button class="tab" data-page="atelier">3. Atelier</button>
+</nav>
+
+<section id="quiz" class="page">
+ <div class="card">
+  <div class="row"><div><span class="eyebrow">Défi interactif</span><h2>Vrai ou faux ?</h2></div><span class="pill" id="counter">Question 1 / 6</span></div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <p id="question">Observe attentivement cet exemple. Selon toi, est-il authentique ou généré par l'IA ?</p>
+  <div class="media" id="mediaBox"><div><div style="font-size:40px">🎧</div><strong>Zone du média</strong><p class="small">Ajoute une image, un extrait audio ou une vidéo autorisé pour cette démonstration.</p></div></div>
+  <label class="small" for="mediaFile">Charger une image ou un fichier audio</label>
+  <input type="file" id="mediaFile" accept="audio/*,image/*">
+  <div class="actions">
+   <button class="yes" id="trueBtn">Cela semble authentique</button>
+   <button class="no" id="falseBtn">Cela semble synthétique</button>
+  </div>
+  <div id="result" class="feedback hidden" aria-live="polite"></div>
+  <div class="actions"><button class="secondary" id="nextBtn" disabled>Question suivante →</button><button class="secondary" id="restartBtn">Recommencer</button></div>
+  <p class="small muted">Important : ce quiz est un outil pédagogique. Il ne détecte pas automatiquement les deepfakes. Il aide à apprendre à repérer les indices suspects.</p>
+ </div>
+ <div class="card row"><div><div class="small muted">Ton score</div><div class="score" id="score">0 / 6</div></div><div class="small muted" id="scoreText">Réponds aux questions pour commencer.</div></div>
+</section>
+
+<section id="inspecteur" class="page hidden">
+ <div class="card">
+ <span class="eyebrow">Les indices à vérifier</span>
+  <p>Examine les indices audio, image et la source avant de tirer une conclusion.</p>
+  <ul>
+  <li><strong>Audio :</strong> écoute si la voix semble naturelle et si le rythme est cohérent.</li>
+  <li><strong>Image :</strong> observe les détails du visage, les yeux, les mains, l'éclairage et les arrière-plans.</li>
+ <li><strong>Source :</strong> vérifie l'origine de l'image, sa date de publication et la fiabilité du compte qui l'a partagée.</li>
+  </ul>
+  <div class="feedback"><strong>À retenir :</strong> ces signes peuvent attirer l’attention, mais ils ne constituent pas une preuve à eux seuls. Il faut recouper les informations.</div>
+ </div>
+</section>
+
+<section id="atelier" class="page hidden">
+ <div class="card">
+  <span class="eyebrow">Les bons réflexes</span><h2>Avant de partager, vérifie !</h2>
+  <ol>
+   <li>Ne te fie pas uniquement à ce que tu vois ou entends.</li>
+   <li>Recherche la publication d’origine et le contexte.</li>
+   <li>Compare avec plusieurs sources fiables.</li>
+   <li>Demande l’autorisation avant d’utiliser le visage ou la voix d’une personne.</li>
+   <li>Indique clairement lorsqu’un média est synthétique ou modifié.</li>
+  </ol>
+ </div>
+ <div class="card"><h2>Notre charte éthique</h2>
+  <p>Dans ce projet, nous utilisons uniquement des médias autorisés, nous signalons les exemples synthétiques et nous ne diffusons pas de contenu manipulé sans accord.</p>
+ </div>
+</section>
+</main>
+<footer>Projet scolaire • Deepfake pour de bon • Démonstration locale</footer>
+<script>
+
+const questions=[
+ {
+  text: "Exemple 1 — Cette image est-elle authentique ou générée par l'IA ?",
+  image: "images/exemple.jpg",
+  fake: true,
+  why: "Cette image a été créée par une intelligence artificielle."
+ },
+ {
+  text: "Exemple 2 — Écoutez cette voix. Est-elle authentique ou générée par l'IA ?",
+  audio: "audios/audio1.aac",
+  fake: false,
+  why: "Cet audio est un enregistrement vocal réel."
+ },
+ {
+  text: "Exemple 3 — Cette photo de célébrité est-elle authentique ou générée par l'IA ?",
+  image: "images/exemple3.jpeg",
+  fake: false,
+  why: "Cette photo est une véritable image de la célébrité."
+},
+{
+  text: "Exemple 4 — Écoutez cette voix. Est-elle authentique ou générée par l'IA ?",
+  audio: "audios/audio2.mp3",
+  fake: true,
+  why: "Cette voix a été générée artificiellement à partir d'un texte."
+},
+{
+  text: "Exemple 5 — Cette image est-elle authentique ou générée par l'IA ?",
+  image: "images/image3.jpg",
+  fake: true,
+  why: "Cette image a été créée par une intelligence artificielle."
+},
+ 
+];
+
+let index=0,score=0,answered=false;
+const $=id=>document.getElementById(id);
+function showQuestion(){
+ const q=questions[index];answered=false;
+ $("counter").textContent=`Question ${index+1} / ${questions.length}`;
+ $("question").textContent=q.text;
+ $("bar").style.width=(index/questions.length*100)+"%";
+ $("result").classList.add("hidden");$("nextBtn").disabled=true;
+ $("trueBtn").disabled=false;$("falseBtn").disabled=false;
+ $("mediaFile").value="";
+if(q.image){
+ $("mediaBox").innerHTML=`<img src="${q.image}" alt="Image du quiz" style="width:100%;max-width:450px;border-radius:12px;display:block;margin:auto;">`;
+
+}else if(q.audio){
+ $("mediaBox").innerHTML=`
+ <audio controls style="width:100%;">
+<source src="${q.audio}">
+   Votre navigateur ne prend pas en charge l'audio.
+ </audio>`;
+
+}else{
+ $("mediaBox").innerHTML='<div><div style="font-size:40px">🎧 🎬</div><strong>Zone du média</strong><p class="small">Ajoute ici une image, un son ou une vidéo autorisé correspondant à cette question.</p></div>';
+}
+}
+function answer(userSaysFake){
+ if(answered)return;answered=true;
+ const q=questions[index],correct=userSaysFake===q.fake;
+ if(correct)score++;
+ $("result").classList.remove("hidden");
+ $("result").innerHTML=`<strong>${correct?"Bonne réponse !":"Pas tout à fait."}</strong><br>${q.why}<br><span class="small">Réponse attendue dans cet exercice : ${q.fake?"média synthétique":"média présenté comme authentique"}.</span>`;
+ $("trueBtn").disabled=true;$("falseBtn").disabled=true;$("nextBtn").disabled=false;
+ $("score").textContent=`${score} / ${questions.length}`;
+ $("scoreText").textContent=answered&&index===questions.length-1?"Quiz terminé !": "Continue pour découvrir les autres indices.";
+ $("bar").style.width=((index+1)/questions.length*100)+"%";
+}
+$("trueBtn").addEventListener("click",()=>answer(false));
+$("falseBtn").addEventListener("click",()=>answer(true));
+$("nextBtn").addEventListener("click",()=>{
+ if(index<questions.length-1){index++;showQuestion();}
+ else{$("question").textContent=`Quiz terminé ! Ton résultat : ${score} / ${questions.length}.`; $("mediaBox").innerHTML="<strong>Bravo d’avoir participé !</strong>";$("result").classList.add("hidden");$("nextBtn").disabled=true;}
+});
+$("restartBtn").addEventListener("click",()=>{index=0;score=0;$("scoreText").textContent="Réponds aux questions pour commencer.";showQuestion();});
+$("mediaFile").addEventListener("change",event=>{
+ const file=event.target.files[0];if(!file)return;
+ const url=URL.createObjectURL(file);
+ $("mediaBox").innerHTML="";
+ let element;
+ if(file.type.startsWith("audio/")){element=document.createElement("audio");element.controls=true;}
+ else if(file.type.startsWith("video/")){element=document.createElement("video");element.controls=true;element.playsInline=true;}
+ else if(file.type.startsWith("image/")){element=document.createElement("img");element.alt="Image ajoutée pour le quiz";}
+ else{$("mediaBox").textContent="Format non pris en charge. Choisis une image, un fichier audio ou une vidéo.";return;}
+ element.src=url;$("mediaBox").appendChild(element);
+});
+document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
+ document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
+ document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));$(btn.dataset.page).classList.remove("hidden");
+}));
+showQuestion();
+</script>
+</body>
+</html>
