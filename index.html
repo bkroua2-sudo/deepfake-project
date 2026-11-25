@@ -32,6 +32,7 @@ footer{text-align:center;color:#8fa2c2;padding:24px;font-size:12px}
 </style>
 </head>
 <body>
+
 <header><div class="brand">◆ DEEPFAKE POUR DE BON</div><div class="tag">ATELIER PÉDAGOGIQUE • MÉDIAS SYNTHÉTIQUES</div></header>
 <main>
 <section class="hero">
@@ -64,18 +65,51 @@ footer{text-align:center;color:#8fa2c2;padding:24px;font-size:12px}
  <div class="card row"><div><div class="small muted">Ton score</div><div class="score" id="score">0 / 6</div></div><div class="small muted" id="scoreText">Réponds aux questions pour commencer.</div></div>
 </section>
 
+
 <section id="inspecteur" class="page hidden">
- <div class="card">
- <span class="eyebrow">Les indices à vérifier</span>
-  <p>Examine les indices audio, image et la source avant de tirer une conclusion.</p>
-  <ul>
-  <li><strong>Audio :</strong> écoute si la voix semble naturelle et si le rythme est cohérent.</li>
-  <li><strong>Image :</strong> observe les détails du visage, les yeux, les mains, l'éclairage et les arrière-plans.</li>
- <li><strong>Source :</strong> vérifie l'origine de l'image, sa date de publication et la fiabilité du compte qui l'a partagée.</li>
-  </ul>
-  <div class="feedback"><strong>À retenir :</strong> ces signes peuvent attirer l’attention, mais ils ne constituent pas une preuve à eux seuls. Il faut recouper les informations.</div>
- </div>
+  <div class="card">
+    <span class="eyebrow">Inspecteur Deepfake</span>
+    <h2>Analysez un média</h2>
+
+    <p>
+      Importez une image ou un fichier audio pour examiner
+      les indices pouvant révéler une manipulation par IA.
+    </p>
+
+    <h3>Les indices à vérifier</h3>
+
+    <p>
+      Examine les indices audio, image et la source avant de tirer une conclusion.
+    </p>
+
+    <ul>
+      <li><strong>Audio :</strong> écoute si la voix semble naturelle et si le rythme est cohérent.</li>
+      <li><strong>Image :</strong> observe les détails du visage, les yeux, les mains, l'éclairage et les arrière-plans.</li>
+      <li><strong>Source :</strong> vérifie l'origine de l'image, sa date de publication et la fiabilité du compte qui l'a partagée.</li>
+    </ul>
+
+    <div class="feedback">
+      <strong>À retenir :</strong> ces signes peuvent attirer l’attention, mais ils ne constituent pas une preuve à eux seuls. Il faut recouper les informations.
+    </div>
+
+    <hr>
+
+    <h2>Tester une image</h2>
+    <p>Importez une image pour obtenir une estimation de son authenticité.</p>
+
+    <input type="file" id="inspectFile" accept="image/*">
+
+    <div id="inspectPreview" class="feedback">
+      Le résultat de l'analyse apparaîtra ici.
+    </div>
+
+    <div class="feedback">
+      <strong>Conseil :</strong>
+      Vérifiez les détails du média, sa source et sa cohérence avant de tirer une conclusion.
+    </div>
+  </div>
 </section>
+
 
 <section id="atelier" class="page hidden">
  <div class="card">
@@ -185,9 +219,11 @@ $("mediaFile").addEventListener("change",event=>{
 });
 document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
  document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
- document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));$(btn.dataset.page).classList.remove("hidden");
+document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
+document.getElementById(btn.dataset.page).classList.remove("hidden");
 }));
 showQuestion();
 </script>
+<script src="detecteur.js"></script>
 </body>
 </html>
