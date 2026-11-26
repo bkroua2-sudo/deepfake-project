@@ -47,6 +47,43 @@ footer{text-align:center;color:#8fa2c2;padding:24px;font-size:12px}
  <button class="tab" data-page="laboratoire">4. Laboratoire multimédia</button>
 </nav>
 
+<section id="laboratoire" class="page hidden">
+  <div class="card">
+    <span class="eyebrow">Laboratoire multimédia</span>
+    <h2>Analyse des caractéristiques d'une image</h2>
+
+    <p>
+      Importez une image pour découvrir ses caractéristiques numériques :
+      dimensions, nombre de pixels, format et taille du fichier.
+    </p>
+
+    <input type="file" id="imageLabInput" accept="image/*">
+
+    <div id="imageLabResult" hidden>
+      <img id="imageLabPreview" alt="Image importée"
+           style="max-width:100%; max-height:300px; margin-top:20px; border-radius:12px;">
+
+      <h3>Informations de l'image</h3>
+      <p id="imageLabName"></p>
+      <p id="imageLabDimensions"></p>
+      <p id="imageLabPixels"></p>
+      <p id="imageLabFormat"></p>
+      <p id="imageLabSize"></p>
+
+      <h3>Le lien avec le cours</h3>
+      <p>
+        Une image numérique est composée de pixels. Chaque pixel peut
+        être représenté par des valeurs de couleurs RGB :
+        Rouge, Vert et Bleu.
+      </p>
+      <p>
+        Le format JPEG utilise une technique de compression qui permet
+        de réduire la taille du fichier, parfois avec une perte de qualité.
+      </p>
+    </div>
+  </div>
+</section>
+
 <section id="quiz" class="page">
  <div class="card">
   <div class="row"><div><span class="eyebrow">Défi interactif</span><h2>Vrai ou faux ?</h2></div><span class="pill" id="counter">Question 1 / 6</span></div>
