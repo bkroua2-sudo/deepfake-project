@@ -145,6 +145,7 @@ if (inspectFile) {
   });
 }
 
+
 // ===== LABORATOIRE MULTIMÉDIA : ANALYSE D'IMAGE =====
 
 const imageLabInput = document.getElementById("imageLabInput");
@@ -152,23 +153,20 @@ const imageLabInput = document.getElementById("imageLabInput");
 if (imageLabInput) {
   imageLabInput.addEventListener("change", function () {
     const file = this.files[0];
-
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      alert("Veuillez choisir une image valide.");
-      return;
-    }
+    const result = document.getElementById("imageLabResult");
+    const preview = document.getElementById("imageLabPreview");
+
+    result.hidden = false;
+    document.getElementById("imageLabName").textContent = "Chargement de l'image...";
 
     const imageURL = URL.createObjectURL(file);
-    const preview = document.getElementById("imageLabPreview");
 
     preview.onload = function () {
       const width = preview.naturalWidth;
       const height = preview.naturalHeight;
       const pixels = width * height;
-
-      document.getElementById("imageLabResult").hidden = false;
 
       document.getElementById("imageLabName").textContent =
         "Nom : " + file.name;
@@ -180,11 +178,17 @@ if (imageLabInput) {
         "Nombre total de pixels : " + pixels.toLocaleString("fr-FR");
 
       document.getElementById("imageLabFormat").textContent =
-        "Format : " + file.type;
+        "Format : " + (file.type || "Inconnu");
 
       document.getElementById("imageLabSize").textContent =
         "Taille du fichier : " + (file.size / 1024).toFixed(2) + " Ko";
 
+      URL.revokeObjectURL(imageURL);
+    };
+
+    preview.onerror = function () {
+      document.getElementById("imageLabName").textContent =
+        "Impossible de lire cette image.";
       URL.revokeObjectURL(imageURL);
     };
 
