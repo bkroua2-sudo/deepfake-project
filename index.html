@@ -264,11 +264,29 @@ $("mediaFile").addEventListener("change",event=>{
  else{$("mediaBox").textContent="Format non pris en charge. Choisis une image, un fichier audio ou une vidéo.";return;}
  element.src=url;$("mediaBox").appendChild(element);
 });
-document.querySelectorAll(".tab").forEach(btn=>btn.addEventListener("click",()=>{
- document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
-document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));
-document.getElementById(btn.dataset.page).classList.remove("hidden");
-}));
+document.querySelectorAll(".tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const pageId = btn.dataset.page;
+    const targetPage = document.getElementById(pageId);
+
+    if (!targetPage) {
+      console.error("Section introuvable :", pageId);
+      return;
+    }
+
+    document.querySelectorAll(".tab").forEach(b => {
+      b.classList.remove("active");
+    });
+
+    btn.classList.add("active");
+
+    document.querySelectorAll(".page").forEach(p => {
+      p.classList.add("hidden");
+    });
+
+    targetPage.classList.remove("hidden");
+  });
+});
 showQuestion();
 </script>
 <script src="detecteur.js"></script>
