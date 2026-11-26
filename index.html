@@ -178,7 +178,7 @@ const $=id=>document.getElementById(id);
 function showQuestion(){
  const q=questions[index];answered=false;
  $("counter").textContent=`Question ${index+1} / ${questions.length}`;
- $("question").textContent=q.text;
+$("question").textContent = q.text.replace(/Exemple \d+/i, `Exemple ${index + 1}`);
  $("bar").style.width=(index/questions.length*100)+"%";
  $("result").classList.add("hidden");$("nextBtn").disabled=true;
  $("trueBtn").disabled=false;$("falseBtn").disabled=false;
