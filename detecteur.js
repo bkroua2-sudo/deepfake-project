@@ -144,3 +144,50 @@ if (inspectFile) {
     analyzeImage(file);
   });
 }
+
+// ===== LABORATOIRE MULTIMÉDIA : ANALYSE D'IMAGE =====
+
+const imageLabInput = document.getElementById("imageLabInput");
+
+if (imageLabInput) {
+  imageLabInput.addEventListener("change", function () {
+    const file = this.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Veuillez choisir une image valide.");
+      return;
+    }
+
+    const imageURL = URL.createObjectURL(file);
+    const preview = document.getElementById("imageLabPreview");
+
+    preview.onload = function () {
+      const width = preview.naturalWidth;
+      const height = preview.naturalHeight;
+      const pixels = width * height;
+
+      document.getElementById("imageLabResult").hidden = false;
+
+      document.getElementById("imageLabName").textContent =
+        "Nom : " + file.name;
+
+      document.getElementById("imageLabDimensions").textContent =
+        "Dimensions : " + width + " × " + height + " pixels";
+
+      document.getElementById("imageLabPixels").textContent =
+        "Nombre total de pixels : " + pixels.toLocaleString("fr-FR");
+
+      document.getElementById("imageLabFormat").textContent =
+        "Format : " + file.type;
+
+      document.getElementById("imageLabSize").textContent =
+        "Taille du fichier : " + (file.size / 1024).toFixed(2) + " Ko";
+
+      URL.revokeObjectURL(imageURL);
+    };
+
+    preview.src = imageURL;
+  });
+}
