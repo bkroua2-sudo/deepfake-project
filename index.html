@@ -168,7 +168,11 @@ const questions=[
   why: "Cette image est une photographie réelle."
 },
 ];
-
+// Mélanger les questions aléatoirement
+for (let i = questions.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [questions[i], questions[j]] = [questions[j], questions[i]];
+}
 let index=0,score=0,answered=false;
 const $=id=>document.getElementById(id);
 function showQuestion(){
